@@ -1,4 +1,4 @@
-val filePath = "D:\\Documents\\ScalaProjects\\AlgoTasks\\src\\dataTask5.txt"
+val filePath = "D:\\Documents\\ScalaProjects\\ScalaDruTest-1\\.myData\\dataTask5.txt"
 
 def longSum(top: Array[Int], bottom: Array[Int]): Array[Int] = {
 
