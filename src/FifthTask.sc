@@ -1,42 +1,37 @@
-val filePath = "D:\\Documents\\ScalaProjects\\ScalaDruTest-1\\.myData\\dataTask5.txt"
+val filePath =
+  "D:\\Documents\\ScalaProjects\\ScalaDruTest-1\\.myData\\dataTask5.txt"
 
-def longSum(top: Array[Int], bottom: Array[Int]): Array[Int] = {
-
+def longSum(top: List[Int], bottom: List[Int]): List[Int] = {
   @annotation.tailrec
-  def loopLongSum(i: Int, buffer: Int, res: Array[Int]): Array[Int] = {
+  def loopLongSum(i: Int, buffer: Int, res: List[Int]): List[Int] = {
     val topVal = if (i >= top.length) 0 else top(top.length - i - 1)
-    val bottomVal = if (i >= bottom.length) 0 else bottom(bottom.length - i - 1)
+    val bottomVal =
+      if (i >= bottom.length) 0 else bottom(bottom.length - i - 1)
 
-    if (i >= top.length && i >= bottom.length && buffer == 0)
-      res
-    else if (i >= top.length && i >= bottom.length){
-      Array.concat(Array(buffer), res)
-    }else{
+    if (i < (top.length max bottom.length)) {
       val sum = topVal + bottomVal + buffer
-      if (sum < 10){
-        loopLongSum(i + 1, 0, Array.concat(Array(sum), res))
-      }else{
-        loopLongSum(i + 1, 1, Array.concat(Array(sum - 10), res))
-      }
+      loopLongSum(i + 1, sum / 10, (sum % 10) :: res)
+    } else {
+      if (buffer > 0) buffer :: res else res
     }
   }
-
-  loopLongSum(0, 0, Array())
+  loopLongSum(0, 0, Nil)
 }
 
-
 val bufferedSource = io.Source.fromFile(filePath)
-val dataLines: Array[String] = bufferedSource.getLines.toArray
-bufferedSource.close
+val dataLines = bufferedSource.getLines
 
 @annotation.tailrec
-def sum(i: Int, answer: Array[Int]):Array[Int] = {
-  if (i == dataLines.length)
-    answer
-  else{
-    val intArr = dataLines(i).toArray.map(x => (x.toInt - '0'.toInt))
-    sum(i + 1, longSum(answer, intArr))
+def sum(answer: List[Int], line: String): List[Int] = {
+  if (!dataLines.hasNext) {
+    val intArr = line.toList.map(x => x.toInt - '0'.toInt)
+    longSum(answer, intArr)
+  } else {
+    val intArr = line.toList.map(x => x.toInt - '0'.toInt)
+    sum(longSum(answer, intArr), dataLines.next)
   }
 }
 
-sum(0, Array(0)).take(10).mkString("<", "", ">")
+sum(List(0), dataLines.next).take(10).mkString("<", "", ">")
+
+bufferedSource.close
