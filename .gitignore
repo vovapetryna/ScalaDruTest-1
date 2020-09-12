@@ -4,5 +4,6 @@
 *.iml
 *.ipr
 *.myData
+*.scalafmt.conf
 target
 out
