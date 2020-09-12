@@ -1,56 +1,55 @@
-val dataList = Array(-11, -10, -9, -8, -6, -5, -4, -4, -2, -2, -1, -1, -1, 0, 0, 1, 1, 1, 2, 3, 4, 5, 5, 6, 7, 8, 13, 14)
-val bound = dataList.length - 1
-var targetNumber = 0
+val dataList = List(-11, -10, -9, -8, -6, -5, -4, -4, -2, -2, -1, -1, -1, 0,
+  0, 1, 1, 1, 2, 3, 4, 5, 5, 6, 7, 8, 13, 14)
 val Inf = 100
-
 dataList.sorted
 
 @annotation.tailrec
-def getMiddleElement(leftId: Int, rightId: Int, midId: Int,
-                     prevMidVal: Int, mSum: Int): Int = {
-  if (midId == rightId){
-    mSum
-  }else if (dataList(midId) == prevMidVal){
-    getMiddleElement(leftId, rightId, midId + 1, dataList(midId), mSum)
-  }else{
-    if (dataList(leftId) +
-        dataList(midId) +
-        dataList(rightId) == 0){
-      println(dataList(leftId) + " " +
-              dataList(midId) + " " +
-              dataList(rightId))
-
-      getMiddleElement(leftId, rightId, midId + 1, dataList(midId), mSum + 1)
-    }else{
-      getMiddleElement(leftId, rightId, midId + 1, dataList(midId), mSum)
-    }
+def getMiddleElement(
+    items: List[Int],
+    prevValue: Int,
+    sum: Int,
+    lValue: Int,
+    rValue: Int
+): Int =
+  items match {
+    case `prevValue` :: tail =>
+      getMiddleElement(tail, prevValue, sum, lValue, rValue)
+    case head :: tail if (head + lValue + rValue == 0) =>
+      getMiddleElement(tail, head, sum + 1, lValue, rValue)
+    case head :: tail => getMiddleElement(tail, head, sum, lValue, rValue)
+    case _            => sum
   }
-}
 
 @annotation.tailrec
-def getRightElement(leftId: Int, rightId: Int, prevRightVal: Int, rSum: Int): Int = {
-  if (dataList(rightId) == 0 || leftId == rightId){
-    rSum
-  }else if (dataList(rightId) == prevRightVal){
-    getRightElement(leftId, rightId - 1, dataList(rightId), rSum)
-  }else{
-    getRightElement(leftId, rightId - 1, dataList(rightId),
-      rSum + getMiddleElement(leftId, rightId, leftId + 1, Inf, 0))
+def getRightElement(
+    items: List[Int],
+    prevValue: Int,
+    sum: Int,
+    lValue: Int
+): Int =
+  items match {
+    case 0 :: _              => sum
+    case `prevValue` :: tail => getRightElement(tail, prevValue, sum, lValue)
+    case head :: tail =>
+      getRightElement(
+        tail,
+        head,
+        sum + getMiddleElement(tail, Inf, 0, lValue, head),
+        lValue
+      )
   }
-}
 
 @annotation.tailrec
-def getLeftElement(leftId: Int, prevLeftVal: Int, lSum: Int): Int = {
-  if (dataList(leftId) == 0) {
-    lSum
-  }else if (dataList(leftId) == prevLeftVal){
-    getLeftElement(leftId + 1, dataList(leftId), lSum)
-  }else{
-    getLeftElement(leftId + 1, dataList(leftId),
-      lSum + getRightElement(leftId, bound, Inf, 0))
+def buildCombination(items: List[Int], prevValue: Int, sum: Int): Int =
+  items match {
+    case 0 :: _              => sum
+    case `prevValue` :: tail => buildCombination(tail, prevValue, sum)
+    case head :: tail =>
+      buildCombination(
+        tail,
+        head,
+        sum + getRightElement(tail.reverse, Inf, 0, head)
+      )
   }
-}
 
-
-
-getLeftElement(0, Inf, 0)
+buildCombination(dataList, Inf, 0)
