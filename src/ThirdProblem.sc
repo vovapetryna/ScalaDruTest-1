@@ -1,35 +1,22 @@
-val limit = 73
-
-def palindromeCheck(binNumber: String):Boolean = {
-  val binNumberLength = binNumber.length
-
-  @annotation.tailrec
-  def loopPalindromeCheck(i: Int): Boolean = {
-    if (i == binNumberLength / 2)
-      true
-    else
-      if (binNumber(i) == binNumber(binNumberLength - i - 1))
-        loopPalindromeCheck(i + 1)
-      else
-        false
+@annotation.tailrec
+def palindromeCheck(binNumber: List[Char]): Boolean =
+  binNumber match {
+    case Nil     => true
+    case List(_) => true
+    case binNumber =>
+      binNumber.head == binNumber.last && palindromeCheck(binNumber.tail.init)
   }
-
-  loopPalindromeCheck(0)
-}
 
 def palindromeNumber(limit: Int): Int = {
-
   @annotation.tailrec
-  def loopPalindromeNumber(i: Int, count: Int, sum:Int): Int = {
-    if (count > limit)
+  def loopPalindromeNumber(number: Int, numberPoly: Int, sum: Int): Int = {
+    if (numberPoly > limit)
       sum
+    else if (palindromeCheck(number.toBinaryString.toList))
+      loopPalindromeNumber(number + 1, numberPoly + 1, sum + number)
     else
-      if (palindromeCheck(i.toBinaryString))
-        loopPalindromeNumber(i + 1, count + 1, sum + i)
-      else
-        loopPalindromeNumber(i + 1, count, sum)
+      loopPalindromeNumber(number + 1, numberPoly, sum)
   }
-
   loopPalindromeNumber(0, 0, 0)
 }
 
