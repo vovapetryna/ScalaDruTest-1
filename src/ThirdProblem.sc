@@ -1,11 +1,4 @@
-@annotation.tailrec
-def palindromeCheck(binNumber: List[Char]): Boolean =
-  binNumber match {
-    case Nil     => true
-    case List(_) => true
-    case binNumber =>
-      binNumber.head == binNumber.last && palindromeCheck(binNumber.tail.init)
-  }
+def palindromeCheck(binNumber: List[Char]): Boolean = binNumber == binNumber.reverse
 
 def palindromeNumber(limit: Int): Int = {
   @annotation.tailrec
