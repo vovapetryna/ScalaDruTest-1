@@ -3,18 +3,7 @@ val top =
 val bottom =
   "11100101000010101000001010010000010101011000110000110101000001010100000010000000010101100000110100100010111111111111111010010001010000001000000100000101011110101000000001010100000001010100101010111001010100000000000010101010101101010010101010101111001010000000000000001010010100111000010000000010100001010101000000110000001010101000000000000101001111100000000000010010101010000001"
 
-def sumChars(top: Char, bottom: Char): Int = top + bottom - 2 * '0'
-
-@annotation.tailrec
-def loopSumBinaries(idx: Int = 0, buffer: Int = 0, resSum: Int = 0): Int = {
-  if (idx < top.length) {
-    val bottomChar =
-      if (idx >= bottom.length) '0' else bottom(bottom.length - idx - 1)
-    val localSum = sumChars(top(top.length - idx - 1), bottomChar) + buffer
-    loopSumBinaries(idx + 1, localSum / 2, resSum + (localSum % 2) * 2 - 1)
-  } else {
-    resSum + buffer
-  }
-}
-
-loopSumBinaries()
+(BigInt(top, 2) + BigInt(bottom, 2))
+  .toString(2)
+  .map(c => (c.toInt - '0'.toInt) * 2 - 1)
+  .sum
