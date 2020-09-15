@@ -3,7 +3,7 @@
 
 //======================================================================================================================
 // Task #1
-def stringXOR(string: String): Int = 0 // todo: replace with your implementation
+def stringXOR(string: String): Int = string.count(_ == '1') % 2
 
 stringXOR("1 0 0 1 0") == 0
 stringXOR("1 0 1 1 1 0 0 1 0 0 0 0") == 1
@@ -12,7 +12,7 @@ stringXOR("1 0 0 1 0 1 0 0 1 0 1 0 1 0 1 0 1 0") == 0
 
 //======================================================================================================================
 // Task #2
-def multiples(n: Int): Int = 0 // todo: replace with your implementation
+def multiples(n: Int): Int = (1 until n).map(x => if (x % 3 == 0 || x % 5 == 0) x else 0).sum
 
 multiples(10) == 23
 multiples(23) == 119
@@ -21,7 +21,7 @@ multiples(119) == 3300
 
 //======================================================================================================================
 // Task #3
-def automorphic(n: Int): Boolean = false // todo: replace with your implementation
+def automorphic(n: Int): Boolean = (n*n).toString.endsWith(n.toString)
 
 automorphic(1)
 !automorphic(3)
@@ -37,7 +37,16 @@ automorphic(625)
 
 //======================================================================================================================
 // Task #4
-def simpleIndices(string: String, startIndex: Int): Int = 0 // todo: replace with your implementation
+def simpleIndices(string: String, startIndex: Int):Int = {
+  @annotation.tailrec
+  def loop(i: Int, stack: Int): Int = {
+    if (stack == 0) i - 1 else
+    if (string(i) == '(') loop(i + 1, stack + 1) else
+    if (string(i) == ')') loop(i + 1, stack -1) else
+    loop(i + 1, stack)
+  }
+  if (!("()" contains string(startIndex))) -1 else loop(startIndex + 1, 1)
+}
 
 simpleIndices("((1)23(45))(aB)", 0) == 10
 simpleIndices("((1)23(45))(aB)", 1) == 3
@@ -51,7 +60,10 @@ simpleIndices("(>_(va)`?(h)C(as)(x(hD)P|(fg)))", 19) == 22
 
 //======================================================================================================================
 // Task #5
-def tribonacci(triple: (Int, Int, Int), n: Int): List[Int] = Nil // todo: replace with your implementation
+def tribonacci(triple: (Int, Int, Int), n: Int): List[Int] = {
+  def trib(t: (Int, Int, Int)):LazyList[Int] = t._1 #:: trib((t._2, t._3, t._1 + t._2 + t._3))
+  trib(triple).take(n).toList
+}
 
 tribonacci((1, 1, 1), 10) == List(1, 1, 1, 3, 5, 9, 17, 31, 57, 105)
 tribonacci((0, 0, 1), 10) == List(0, 0, 1, 1, 2, 4, 7, 13, 24, 44)
