@@ -89,8 +89,15 @@ reverseFun("jointhedarkside") == "ejdoiisnktrhaed"
 
 //======================================================================================================================
 // Task #7
-def foldAnArray(list: List[Int], nTimes: Int): List[Int] = Nil // todo: replace with your implementation
+@annotation.tailrec
+def foldAnArray(list: List[Int], nTimes: Int): List[Int] = if (nTimes == 0) list else
+  foldAnArray(
+    list.splitAt(list.length/2)._1
+    .zipAll(list.splitAt(list.length/2)._2.reverse, 0, 0)
+    .map(d => d._1 + d._2), nTimes-1
+  )
 
+foldAnArray(List(1, 2, 3, 4, 5), 1)
 foldAnArray(List(1, 2, 3, 4, 5), 1) == List(6, 6, 3)
 foldAnArray(List(1, 2, 3, 4, 5), 2) == List(9, 6)
 
