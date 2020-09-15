@@ -1,18 +1,14 @@
 val encryptedData =
   "GHMABGZ VKXTMXL LNVVXLL EBDX GHG-LMHI, XGMANLBTLMBV XYYHKM"
 val dictionary = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-val punctuation = ".,:;- "
 
 for (shift <- 1 until dictionary.length) {
   println(
-    encryptedData.map(c =>
-      c match {
-        case _ if punctuation contains c => c
-        case _ if (dictionary.indexOf(c) - shift) < 0 =>
-          dictionary(dictionary.indexOf(c) - shift + dictionary.length)
-        case _ =>
-          dictionary(dictionary.indexOf(c) - shift)
-      }
-    )
+    encryptedData.map(x => x -> dictionary.indexOf(x)).map {
+      case (_, charIdx) if charIdx > -1 && (charIdx - shift) < 0 =>
+        dictionary(charIdx - shift + dictionary.length)
+      case (_, charIdx) if charIdx > -1 => dictionary(charIdx - shift)
+      case (char, _)                    => char
+    }.mkString("", "", "")
   )
 }
