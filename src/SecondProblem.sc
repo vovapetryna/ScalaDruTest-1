@@ -3,7 +3,21 @@ val top =
 val bottom =
   "11100101000010101000001010010000010101011000110000110101000001010100000010000000010101100000110100100010111111111111111010010001010000001000000100000101011110101000000001010100000001010100101010111001010100000000000010101010101101010010101010101111001010000000000000001010010100111000010000000010100001010101000000110000001010101000000000000101001111100000000000010010101010000001"
 
-(BigInt(top, 2) + BigInt(bottom, 2))
-  .toString(2)
-  .map(c => (c.toInt - '0'.toInt) * 2 - 1)
-  .sum
+@annotation.tailrec
+def binSum(number: List[Int], carry: Int, sum: Int): Int =
+  number match {
+    case Nil => sum + carry
+    case head :: tail =>
+      binSum(tail, (head + carry) / 2, sum + (head + carry) % 2 * 2 - 1)
+  }
+
+val len = top.length max bottom.length
+
+binSum(
+  ("0" * (len - top.length) + top zip "0" * (len - bottom.length) + bottom)
+    .map(x => x._1.toInt + x._2.toInt - 2 * '0'.toInt)
+    .toList
+    .reverse,
+  0,
+  0
+)
