@@ -1,16 +1,8 @@
-def palindromeCheck(binNumber: List[Char]): Boolean = binNumber == binNumber.reverse
+def palindromeCheck(binNumber: String): Boolean = binNumber == binNumber.reverse
 
-def palindromeNumber(limit: Int): Int = {
-  @annotation.tailrec
-  def loopPalindromeNumber(number: Int, numberPoly: Int, sum: Int): Int = {
-    if (numberPoly > limit)
-      sum
-    else if (palindromeCheck(number.toBinaryString.toList))
-      loopPalindromeNumber(number + 1, numberPoly + 1, sum + number)
-    else
-      loopPalindromeNumber(number + 1, numberPoly, sum)
-  }
-  loopPalindromeNumber(0, 0, 0)
-}
+val res = LazyList
+  .from(0)
+  .map(x => if (palindromeCheck(x.toBinaryString)) x else 0)
+  .filter(_ > 0)
 
-palindromeNumber(73)
+res.take(73).sum
