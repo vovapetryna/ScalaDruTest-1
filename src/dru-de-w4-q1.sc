@@ -78,7 +78,10 @@ tribonacci((300, 200, 100), 0) == Nil
 
 //======================================================================================================================
 // Task #6
-def reverseFun(string: String): String = "" // todo: replace with your implementation
+def reverseFun(string: String): String = string.reverse.zip(string)
+  .flatten(d => List(d._1, d._2))
+  .mkString("", "", "")
+  .take(string.length)
 
 reverseFun("012345") == "504132"
 reverseFun("jointhedarkside") == "ejdoiisnktrhaed"
