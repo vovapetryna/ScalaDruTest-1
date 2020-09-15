@@ -11,13 +11,10 @@ def binSum(number: List[Int], carry: Int, sum: Int): Int =
       binSum(tail, (head + carry) / 2, sum + (head + carry) % 2 * 2 - 1)
   }
 
-val len = top.length max bottom.length
-
 binSum(
-  ("0" * (len - top.length) + top zip "0" * (len - bottom.length) + bottom)
+  top.reverse.zipAll(bottom.reverse, '0', '0')
     .map(x => x._1.toInt + x._2.toInt - 2 * '0'.toInt)
-    .toList
-    .reverse,
+    .toList,
   0,
   0
 )
