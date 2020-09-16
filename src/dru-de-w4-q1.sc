@@ -92,19 +92,26 @@ reverseFun("jointhedarkside") == "ejdoiisnktrhaed"
 @annotation.tailrec
 def foldAnArray(list: List[Int], nTimes: Int): List[Int] = if (nTimes == 0) list else
   foldAnArray(
-    list.splitAt(list.length/2)._1
-    .zipAll(list.splitAt(list.length/2)._2.reverse, 0, 0)
+    (list take list.length/2)
+    .zipAll((list drop list.length/2).reverse, 0, 0)
     .map(d => d._1 + d._2), nTimes-1
   )
 
-foldAnArray(List(1, 2, 3, 4, 5), 1)
 foldAnArray(List(1, 2, 3, 4, 5), 1) == List(6, 6, 3)
 foldAnArray(List(1, 2, 3, 4, 5), 2) == List(9, 6)
 
 
 //======================================================================================================================
 // Task #8
-def stringExpansion(string: String): String = "" // todo: replace with your implementation
+def stringExpansion(string: String): String = {
+  @annotation.tailrec
+  def loop(i: Int, buffer: Int, ans: String): String = {
+    if (i == string.length) ans else
+    if (string(i).isDigit) loop(i+1, string(i).toInt - '0'.toInt, ans) else
+      loop(i + 1, buffer, ans + (string(i).toString * buffer))
+  }
+  loop(0, 1, "")
+}
 
 stringExpansion("3abc") == "aaabbbccc"
 stringExpansion("3D2a5d2f") == "DDDaadddddff"
@@ -115,7 +122,7 @@ stringExpansion("abcde") == "abcde"
 
 //======================================================================================================================
 // Task #9
-def lifePathNumber(date: String): Int = 0 // todo: replace with your implementation
+def lifePathNumber(date: String): Int = 0 
 
 lifePathNumber("1879-03-14") == 6 // Albert Einstein
 lifePathNumber("1815-12-10") == 1 // Ada Lovelace
