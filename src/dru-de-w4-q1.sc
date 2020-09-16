@@ -165,7 +165,10 @@ fatFingers("The end of the institution, maintenance, and administration of gover
 
 //======================================================================================================================
 // Task #12
-def xbonacci(signature: List[Int], n: Int): List[Int] = Nil // todo: replace with your implementation
+def xbonacci(signature: List[Int], n: Int): List[Int] = n match {
+  case 0 => Nil
+  case _ => signature.head :: xbonacci(signature.tail :+ signature.sum, n - 1)
+}
 
 xbonacci(List(0, 1), 10) == List(0, 1, 1, 2, 3, 5, 8, 13, 21, 34)
 xbonacci(List(1, 1), 10) == List(1, 1, 2, 3, 5, 8, 13, 21, 34, 55)
