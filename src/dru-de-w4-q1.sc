@@ -143,7 +143,14 @@ lifePathNumber("1971-06-28") == 7 // Elon Musk
 //======================================================================================================================
 // Task #10
 case class ChromosomePair(chromosome1: List[String], chromosome2: List[String]) {
-  def crossover(crossIndices: List[Int]): ChromosomePair = ChromosomePair(Nil, Nil) // todo: replace with your implementation
+  def crossover(crossIndices: List[Int]): ChromosomePair = ChromosomePair(
+    chromosome1.zipWithIndex
+      .map(d => if ((crossIndices :+ chromosome1.length)
+        .distinct.sorted.indexWhere(_ > d._2) % 2 == 0) chromosome1(d._2) else chromosome2(d._2)),
+    chromosome2.zipWithIndex
+      .map(d => if ((crossIndices :+ chromosome1.length)
+        .distinct.sorted.indexWhere(_ > d._2) % 2 == 0) chromosome2(d._2) else chromosome1(d._2))
+  )
 }
 
 ChromosomePair(List("1", "1", "1", "1", "1"), List("2", "2", "2", "2", "2")).crossover(Nil) == ChromosomePair(List("1", "1", "1", "1", "1"), List("2", "2", "2", "2", "2"))
