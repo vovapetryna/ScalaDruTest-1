@@ -163,7 +163,18 @@ ChromosomePair(List("1", "1", "1", "1", "1", "1", "1"), List("2", "2", "2", "2",
 
 //======================================================================================================================
 //Task #11
-def fatFingers(string: String): String = "" // todo: replace with your implementation
+def fatFingers(string: String): String = {
+  @annotation.tailrec
+  def loop(i: Int, buffer: Int, ans: String):String = {
+    if (i == string.length) ans else
+    if ("aA" contains string(i)) loop(i + 1, if (buffer == 0) 1 else -buffer, ans) else
+    loop(i+1, buffer, ans + (
+      if (buffer == 1) string(i).toUpper else
+        if (buffer == -1) string(i).toLower else string(i)
+      ))
+  }
+  loop(0, 0, "")
+}
 
 fatFingers("The quick brown fox jumps over the lazy dog.") == "The quick brown fox jumps over the lZY DOG."
 fatFingers("aAaaaaAaaaAAaAa") == ""
