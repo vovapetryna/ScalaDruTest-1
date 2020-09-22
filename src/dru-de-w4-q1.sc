@@ -37,16 +37,13 @@ automorphic(625)
 
 //======================================================================================================================
 // Task #4
-def simpleIndices(string: String, startIndex: Int):Int = {
-  @annotation.tailrec
-  def loop(i: Int, stack: Int): Int = {
-    if (stack == 0) i - 1 else
-    if (string(i) == '(') loop(i + 1, stack + 1) else
-    if (string(i) == ')') loop(i + 1, stack -1) else
-    loop(i + 1, stack)
-  }
-  if (!("()" contains string(startIndex))) -1 else loop(startIndex + 1, 1)
-}
+def simpleIndices(value:String, startIndex: Int):Int =
+  value.zipWithIndex.foldLeft((0, -1)) { case ((buffer, ans), (c, id)) => c match {
+    case '(' if id >= startIndex => (buffer + 1, ans)
+    case ')' if id >= startIndex => (buffer - 1, if (buffer == 1 && ans == -1) id else ans)
+    case _ => (buffer, ans)
+  }}._2
+
 
 simpleIndices("((1)23(45))(aB)", 0) == 10
 simpleIndices("((1)23(45))(aB)", 1) == 3
