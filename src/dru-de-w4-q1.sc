@@ -123,8 +123,8 @@ stringExpansion("abcde") == "abcde"
 // Task #9
 @annotation.tailrec
 def lifePathNumber(date: String): Int = if (date.length == 1) date.toInt else
-  lifePathNumber(date.toList.map(c => if (c == '-') 0 else c.toInt - '0'.toInt).sum.toString)
-
+  lifePathNumber(date.map(c => c.asDigit).filter(_ > 0).sum.toString)
+  
 lifePathNumber("1879-03-14") == 6 // Albert Einstein
 lifePathNumber("1815-12-10") == 1 // Ada Lovelace
 lifePathNumber("1961-07-04") == 1 // Brendan Eich
