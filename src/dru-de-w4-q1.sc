@@ -106,13 +106,10 @@ foldAnArray(List(1, 2, 3, 4, 5), 2) == List(9, 6)
 //======================================================================================================================
 // Task #8
 def stringExpansion(string: String): String = {
-  @annotation.tailrec
-  def loop(i: Int, buffer: Int, ans: String): String = {
-    if (i == string.length) ans else
-    if (string(i).isDigit) loop(i+1, string(i).toInt - '0'.toInt, ans) else
-      loop(i + 1, buffer, ans + (string(i).toString * buffer))
-  }
-  loop(0, 1, "")
+  string.foldLeft((1, "")){case ((buffer, ans), c) => c match {
+    case d if d.isDigit => (c.toInt - '0'.toInt, ans)
+    case c => (buffer, ans + (c.toString * buffer))
+  }}._2
 }
 
 stringExpansion("3abc") == "aaabbbccc"
