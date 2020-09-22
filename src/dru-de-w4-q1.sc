@@ -12,7 +12,7 @@ stringXOR("1 0 0 1 0 1 0 0 1 0 1 0 1 0 1 0 1 0") == 0
 
 //======================================================================================================================
 // Task #2
-def multiples(n: Int): Int = (1 until n).map(x => if (x % 3 == 0 || x % 5 == 0) x else 0).sum
+def multiples(n: Int): Int = (1 until n).collect { case x if (x % 3 == 0 || x % 5 == 0) => x }.sum
 
 multiples(10) == 23
 multiples(23) == 119
