@@ -57,10 +57,15 @@ simpleIndices("(>_(va)`?(h)C(as)(x(hD)P|(fg)))", 19) == 22
 
 //======================================================================================================================
 // Task #5
-def tribonacci(triple: (Int, Int, Int), n: Int): List[Int] = n match {
-  case 0 => Nil
-  case _ => triple._1 :: tribonacci((triple._2, triple._3, triple._1 + triple._2 + triple._3), n - 1)
+def tribonacci(triple: (Int, Int, Int), n: Int): List[Int] = {
+  @annotation.tailrec
+  def loop(t: (Int, Int, Int), n: Int, ans:List[Int]):List[Int] = n match {
+    case 0 => ans.reverse
+    case _ => loop((t._2, t._3, t._1 + t._2 + t._3), n - 1, t._1 :: ans)
+  }
+  loop(triple, n, Nil)
 }
+
 
 tribonacci((1, 1, 1), 10) == List(1, 1, 1, 3, 5, 9, 17, 31, 57, 105)
 tribonacci((0, 0, 1), 10) == List(0, 0, 1, 1, 2, 4, 7, 13, 24, 44)
